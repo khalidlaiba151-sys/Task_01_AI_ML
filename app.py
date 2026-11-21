@@ -6,8 +6,19 @@ import seaborn as sns
 
 st.set_page_config(page_title="India Air Quality Dashboard", layout="wide")
 
+st.set_page_config(page_title="India Air Quality Dashboard", layout="wide")
+
 HERE = os.path.dirname(os.path.abspath(__file__))
-DATA = os.path.join(HERE, "..", "dataset", "cleaned_city_day.csv")
+CANDIDATES = [
+    os.path.join(HERE, "..", "dataset", "cleaned_city_day.csv"),
+    os.path.join(HERE, "dataset", "cleaned_city_day.csv"),
+    os.path.join(os.getcwd(), "dataset", "cleaned_city_day.csv"),
+    os.path.join(HERE, "cleaned_city_day.csv"),
+]
+DATA = next((p for p in CANDIDATES if os.path.exists(p)), None)
+if DATA is None:
+    st.error("cleaned_city_day.csv not found. Upload it to the dataset/ folder of the repository.")
+    st.stop()
 POLLUTANTS = ["PM2_5", "PM10", "NO", "NO2", "NOx", "NH3", "CO", "SO2", "O3", "Benzene", "Toluene", "AQI"]
 ORDER = ["Good", "Satisfactory", "Moderate", "Poor", "Very Poor", "Severe"]
 
